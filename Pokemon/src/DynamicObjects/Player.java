@@ -95,7 +95,6 @@ public class Player extends GameObject{
 		this.y += ySpeed;
 
 		updateBound();
-		boundStop();
 
 		if(Handler.getKeyManager().keyJustPressed(KeyEvent.VK_T)) {
 			debug = !debug;

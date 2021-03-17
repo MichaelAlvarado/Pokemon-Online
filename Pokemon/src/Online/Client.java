@@ -16,6 +16,7 @@ public class Client implements Runnable{
 	Player player; 
 
 	Socket s;
+	final static String ipAddress = "localhost";
 	final static int port = 6666;
 
 	public Client(Player player) {
@@ -43,7 +44,7 @@ public class Client implements Runnable{
 
 	public void SendPlayer(){
 		try{    
-			s = new Socket("localhost",port);  
+			s = new Socket(this.ipAddress,port);  
 			DataOutputStream dout=new DataOutputStream(s.getOutputStream());  
 			while(running) {
 				dout.writeUTF(player.x+","+player.y+","+player.direction+","+player.moving);  
