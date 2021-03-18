@@ -1,10 +1,10 @@
 package Game;
 
 import Main.Launch;
-import Maps.FirstMap;
+import Maps.*;
 
 public class launcher {
 	public static void main(String[] args) {
-		Launch.runScene(new FirstMap());
+		Launch.runScene(new Menu());
 	}
 }

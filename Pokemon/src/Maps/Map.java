@@ -10,13 +10,16 @@ import Camera.Camera;
 import DynamicObjects.Player;
 import GameObject.GameObject;
 import GameSetUp.Handler;
+import Ground.Ground;
 import Online.Client;
 import Online.Server;
+import Resources.KeyManager;
 
 public class Map {
 
 	public List<GameObject> staticObjects;
 	public List<GameObject> dynamicObjects;
+	public List<Ground> grounds;
 	public Player player;
 	public Camera camera; //Testing
 	private boolean ServerOn = false;
@@ -25,6 +28,7 @@ public class Map {
 	public Map () {
 		staticObjects = new ArrayList<GameObject>();
 		dynamicObjects = new ArrayList<GameObject>();
+		grounds = new ArrayList<Ground>();
 	}
 
 	public Player addOnlinePlayer() {
@@ -39,6 +43,10 @@ public class Map {
 
 	public void addDynamicObject(GameObject object) {
 		dynamicObjects.add(object);
+	}
+	
+	public void addGround(Ground ground) {
+		grounds.add(ground);
 	}
 
 	public void render(Graphics g) {
@@ -56,6 +64,7 @@ public class Map {
 		player.tick();
 		for(GameObject o : staticObjects) {
 			o.tick();
+			if(player.collision(o)) player.ySpeed = 0;
 		}
 		for(GameObject o : dynamicObjects) {
 			if(!(o instanceof Player)) {
@@ -63,11 +72,11 @@ public class Map {
 				if(player.collision(o)) player.ySpeed = 0;
 			}
 		}
-		if(Handler.getKeyManager().keyJustPressed(KeyEvent.VK_0) && !ClientOn && !ServerOn) {
+		if(KeyManager.keyJustPressed(KeyEvent.VK_0) && !ClientOn && !ServerOn) {
 			this.ServerOn = true;
 			openServer(this.addOnlinePlayer(), this);
 		}
-		else if(Handler.getKeyManager().keyJustPressed(KeyEvent.VK_9) && !ServerOn && !ClientOn) {
+		else if(KeyManager.keyJustPressed(KeyEvent.VK_9) && !ServerOn && !ClientOn) {
 			this.ClientOn = true;
 			openClient(this.addOnlinePlayer(), this);
 		}

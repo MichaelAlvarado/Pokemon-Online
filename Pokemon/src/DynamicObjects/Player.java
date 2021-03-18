@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import GameObject.GameObject;
 import GameSetUp.Handler;
 import Resources.Animation;
+import Resources.KeyManager;
 import Resources.Sprite;
 
 /**
@@ -25,7 +26,7 @@ public class Player extends GameObject{
 	}
 	public String name;
 	public facing direction = facing.Down;
-	public int xSpeed = 0, ySpeed = 0, walkingSpeed = 4;
+	public int xSpeed = 0, ySpeed = 0, walkingSpeed = 4, runningSpeed = 6;
 	public boolean moving = false;
 	private boolean collided = false;
 	private Rectangle bound; 
@@ -57,31 +58,31 @@ public class Player extends GameObject{
 
 	@Override
 	public void tick() {
-		if(Handler.getKeyManager().up) {
+		if(KeyManager.up) {
 			direction = facing.Up;
 			moving = true;
-			ySpeed = -walkingSpeed;
+			ySpeed = KeyManager.shift? -runningSpeed : -walkingSpeed;
 			xSpeed = 0;
 			animate().startAnimation();
 		}
-		else if(Handler.getKeyManager().down) {
+		else if(KeyManager.down) {
 			direction = facing.Down;
 			moving = true;
-			ySpeed = walkingSpeed;
+			ySpeed = KeyManager.shift? runningSpeed : walkingSpeed;
 			xSpeed = 0;
 			animate().startAnimation();
 		}
-		else if(Handler.getKeyManager().left) {
+		else if(KeyManager.left) {
 			direction = facing.Left;
 			moving = true;
-			xSpeed = -walkingSpeed;
+			xSpeed = KeyManager.shift? -runningSpeed :-walkingSpeed;
 			ySpeed = 0;
 			animate().startAnimation();
 		}
-		else if(Handler.getKeyManager().right) {
+		else if(KeyManager.right) {
 			direction = facing.Rigth;
 			moving = true;
-			xSpeed = walkingSpeed;
+			xSpeed = KeyManager.shift? runningSpeed :walkingSpeed;
 			ySpeed = 0;
 			animate().startAnimation();
 		}
@@ -95,7 +96,7 @@ public class Player extends GameObject{
 
 		updateBound();
 
-		if(Handler.getKeyManager().keyJustPressed(KeyEvent.VK_T)) {
+		if(KeyManager.keyJustPressed(KeyEvent.VK_T)) {
 			debug = !debug;
 		}
 	}
@@ -193,7 +194,7 @@ public class Player extends GameObject{
 	public boolean collision(GameObject object) {
 		collided = this.bound.intersects(object.x, object.y, object.width, object.height);
 		if(collided) {
-			pushBack(walkingSpeed);
+			pushBack(KeyManager.shift? runningSpeed : walkingSpeed);
 			moving = false;
 		}
 

@@ -19,7 +19,7 @@ public class FirstMap implements Scene{
 		Images.LoadImage("Map", "res/Map.png");
 		Images.LoadImage("MapSprite", "res/MapSprite.png");
 		Images.LoadImage("Player", "res/MalePlayer.png");
-
+		
 		//Create Map
 		map = MapGenerator.createMap(Images.get("Map"));
 	}

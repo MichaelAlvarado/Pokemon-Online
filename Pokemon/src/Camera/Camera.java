@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import GameObject.GameObject;
 import GameSetUp.Handler;
+import Ground.Ground;
 import Maps.Map;
 
 public class Camera {
@@ -23,6 +24,10 @@ public class Camera {
 		int x = this.focalPoint.x - (width/2); //Camera left
 		int y = this.focalPoint.y - (height/2); //Camera Up
 		
+		for(Ground o : map.grounds) {
+			o.render(g, o.x - x, o.y - y);
+		}
+		
 		for(GameObject o : map.staticObjects) {
 			o.render(g, o.x - x, o.y - y);
 		}
@@ -30,6 +35,7 @@ public class Camera {
 		for(GameObject o : map.dynamicObjects) {
 			o.render(g, o.x - x, o.y - y);
 		}
+		
 		focalPoint.render(g, focalPoint.x - x, focalPoint.y - y);
 	}
 }
