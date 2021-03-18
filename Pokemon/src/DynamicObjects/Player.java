@@ -8,7 +8,6 @@ import java.awt.event.KeyEvent;
 import GameObject.GameObject;
 import GameSetUp.Handler;
 import Resources.Animation;
-import Resources.Images;
 import Resources.Sprite;
 
 /**
@@ -174,6 +173,7 @@ public class Player extends GameObject{
 		this.bound.setBounds(x, y, width, height);;
 	}
 
+	//Currently not used (dont work with Camera)
 	private void boundStop() {
 		if(x<0) {
 			x = 0;

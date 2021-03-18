@@ -8,9 +8,7 @@ import java.util.List;
 
 import Camera.Camera;
 import DynamicObjects.Player;
-import GUI.Display;
 import GameObject.GameObject;
-import GameSetUp.GameEngine;
 import GameSetUp.Handler;
 import Online.Client;
 import Online.Server;
@@ -20,7 +18,6 @@ public class Map {
 	public List<GameObject> staticObjects;
 	public List<GameObject> dynamicObjects;
 	public Player player;
-	public Player player2; //Testing Online Player
 	public Camera camera; //Testing
 	private boolean ServerOn = false;
 	private boolean ClientOn = false;
@@ -30,6 +27,12 @@ public class Map {
 		dynamicObjects = new ArrayList<GameObject>();
 	}
 
+	public Player addOnlinePlayer() {
+		Player playerOnline = new Player(-100,-100,player.width,player.height);
+		this.addDynamicObject(playerOnline);
+		return playerOnline;
+	}
+	
 	public void addStaticObject(GameObject object) {
 		staticObjects.add(object);
 	}
@@ -61,25 +64,23 @@ public class Map {
 			}
 		}
 		if(Handler.getKeyManager().keyJustPressed(KeyEvent.VK_0) && !ClientOn && !ServerOn) {
-			player2 = new Player(-100,-100,player.width,player.height);
-			addDynamicObject(player2);
 			this.ServerOn = true;
-			openServer();
+			openServer(this.addOnlinePlayer(), this);
 		}
 		else if(Handler.getKeyManager().keyJustPressed(KeyEvent.VK_9) && !ServerOn && !ClientOn) {
 			this.ClientOn = true;
-			openClient();
+			openClient(this.addOnlinePlayer(), this);
 		}
 
 	}
 
-	public void openClient() {
+	public void openClient(Player player, Map map) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					System.out.println("Loading Client");
 					long start = System.nanoTime();
-					Client client = new Client(player);
+					Client client = new Client(player, map);
 					client.start();
 					System.out.println("Client Loaded in: " + ((System.nanoTime()-start)/1000000000.0) + " seconds");
 				} catch (Exception e) {
@@ -90,13 +91,13 @@ public class Map {
 		});
 	}
 
-	public void openServer() {
+	public void openServer(Player player, Map map) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					System.out.println("Loading Server");
 					long start = System.nanoTime();
-					Server server = new Server(player2);
+					Server server = new Server(player, map);
 					server.start();
 					System.out.println("Server Loaded in: " + ((System.nanoTime()-start)/1000000000.0) + " seconds");
 				} catch (Exception e) {

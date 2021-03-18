@@ -1,9 +1,9 @@
 package Online;
 import java.io.*;  
 import java.net.*;
-import java.util.List;
 
-import DynamicObjects.Player;  
+import DynamicObjects.Player;
+import Maps.Map;  
 
 /**
  * @author Michael J. Alvarado
@@ -15,18 +15,18 @@ public class Server implements Runnable {
 	private Thread thread;
 
 	Player player; //New Client Player
-
+	Map map;
 	Socket s;
 	ServerSocket ss;
 	final static int port = 6666;
 
 
-	public Server(Player player) {
-		runServer(player);
+	public Server(Player player, Map map) {
+		this.map = map;
+		this.player = player;
 	}
 
 	public void runServer(Player player){  
-		this.player = player;
 	}
 
 	public synchronized void start(){
@@ -49,14 +49,19 @@ public class Server implements Runnable {
 			ss = new ServerSocket(port);  
 			s=ss.accept();//establishes connection   
 			DataInputStream dis=new DataInputStream(s.getInputStream());  
+			DataOutputStream dout=new DataOutputStream(s.getOutputStream());  
 			while(running) {
+				//Read
 				String  str=(String)dis.readUTF();  
-				System.out.println("message= "+str); 
+				System.out.println("Server message= "+str); 
 				String[] data = str.split(",");
 				player.x = Integer.valueOf(data[0]);
 				player.y = Integer.valueOf(data[1]);
 				player.direction = Player.facing.valueOf(data[2]);
 				player.moving = Boolean.valueOf(data[3]);
+				//Write
+				dout.writeUTF(map.player.x+","+map.player.y+","+map.player.direction+","+map.player.moving);  
+//				dout.flush(); 
 			}
 			ss.close();  
 

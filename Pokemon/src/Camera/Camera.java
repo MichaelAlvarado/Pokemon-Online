@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import GameObject.GameObject;
 import GameSetUp.Handler;
 import Maps.Map;
-import Maps.MapGenerator;
 
 public class Camera {
 	
